@@ -26,7 +26,7 @@ build_signacli:
 		./gradlew installDist
 		./gradlew distTar
 
-build_all: build_hecate build_hecate build_signacli
+build_all: build_hecate build_libsignal build_signacli
 
 copy_setup:
 	cd ../hecate/data && cp * ~/Documents/hecate/data/
