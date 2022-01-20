@@ -29,16 +29,13 @@ build_signacli:
 build_all: build_hecate build_hecate build_signacli
 
 copy_setup:
-	cd ../hecate/data && cp plat_keys.txt mod_keys.txt user_id.txt mod_pk.txt plat_pk.txt ~/Documents/hecate/data/
+	cd ../hecate/data && cp * ~/Documents/hecate/data/
 
 run_sender_daemon:
 	export LD_LIBRARY_PATH="." && ./gradlew run --args='-u +16172991780 daemon'
 
 run_receiver_daemon:
 	export LD_LIBRARY_PATH="." && ./gradlew run --args='-u +16174190472 daemon'
-
-run_sender_daemon_send:
-	export LD_LIBRARY_PATH="." && ./gradlew run --args='--dbus send -m "Ill see you on the dark side of the moon" +16174190472'
 
 run_send_nodaemon:
 		export LD_LIBRARY_PATH="." && ./gradlew run --args='-u +16172991780 send -m "Ill see you on the dark side of the moon" +16174190472'
