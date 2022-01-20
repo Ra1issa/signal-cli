@@ -27,8 +27,10 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -125,8 +127,13 @@ public class SendCommand implements JsonRpcLocalCommand {
             }
         }
         // HECATE
+        Date date = new Date();
+		Timestamp timestamp = new Timestamp(date.getTime());
+		System.out.println("Timestamp START: " + timestamp);
+		
     	var bufff = Hecate.inject_mfrank_jni(messageText);
 		messageText = new String(bufff);
+		
 
         List<String> attachments = ns.getList("attachment");
         if (attachments == null) {
