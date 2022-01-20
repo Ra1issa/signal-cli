@@ -37,8 +37,14 @@ run_sender_daemon:
 run_receiver_daemon:
 	export LD_LIBRARY_PATH="." && ./gradlew run --args='-u +16174190472 daemon'
 
-run_sender:
+run_sender_daemon:
 	export LD_LIBRARY_PATH="." && ./gradlew run --args='--dbus send -m "Ill see you on the dark side of the moon" +16174190472'
+
+run_send_nodaemon:
+		export LD_LIBRARY_PATH="." && ./gradlew run --args='-u +16172991780 send -m "Ill see you on the dark side of the moon" +16174190472'
+
+run_receive_nodaemon:
+		export LD_LIBRARY_PATH="." && ./gradlew run --args='-u +16174190472 receive'
 
 java_versions:
 	sudo update-alternatives --remove-all java
