@@ -28,12 +28,14 @@ build_signacli:
 
 build_all: build_hecate build_hecate build_signacli
 
+run_sender_daemon:
+	export LD_LIBRARY_PATH="." && ./gradlew run --args='-u +16172991780 daemon'
+
+run_receiver_daemon:
+	export LD_LIBRARY_PATH="." && ./gradlew run --args='-u +16174190472 daemon'
 
 run_sender:
-	export LD_LIBRARY_PATH="." && ./gradlew run --args='-u +16174190472 send -m "Ill see you on the dark side of the moon" +16172991780'
-
-run_receiver:
-	export LD_LIBRARY_PATH="." && ./gradlew run --args='-u +16172991780 receive'
+	export LD_LIBRARY_PATH="." && ./gradlew run --args='--dbus send -m "Ill see you on the dark side of the moon" +16174190472'
 
 java_versions:
 	sudo update-alternatives --remove-all java
