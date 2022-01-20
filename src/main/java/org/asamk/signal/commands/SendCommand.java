@@ -4,7 +4,6 @@ import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparser;
 
-import org.Hecate;
 import org.asamk.signal.commands.exceptions.CommandException;
 import org.asamk.signal.commands.exceptions.UnexpectedErrorException;
 import org.asamk.signal.commands.exceptions.UserErrorException;
@@ -131,8 +130,8 @@ public class SendCommand implements JsonRpcLocalCommand {
 		Timestamp timestamp = new Timestamp(date.getTime());
 		System.out.println("Timestamp START: " + timestamp);
 		
-    	var bufff = Hecate.inject_mfrank_jni(messageText);
-		messageText = new String(bufff);
+//    	var bufff = Hecate.inject_mfrank_jni(messageText);
+//		messageText = new String(bufff);
 		
 
         List<String> attachments = ns.getList("attachment");

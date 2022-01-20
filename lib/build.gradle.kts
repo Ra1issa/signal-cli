@@ -15,10 +15,7 @@ repositories {
 
 dependencies {
     api(files("signal-client-java-0.12.0.jar"))
-    api("com.github.turasa:signal-service-java:2.15.3_unofficial_38") {
-      exclude(group = "org.whispersystems", module = "signal-client-java")
-      exclude(group = "org.signal", module = "signal-client-java")
-    }
+    api("com.github.turasa:signal-service-java:2.15.3_unofficial_38")
     implementation("com.fasterxml.jackson.core", "jackson-databind", "2.13.1")
     implementation("com.google.protobuf", "protobuf-javalite", "3.11.4")
     implementation("org.bouncycastle", "bcprov-jdk15on", "1.70")
