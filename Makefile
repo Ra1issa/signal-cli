@@ -28,6 +28,9 @@ build_signacli:
 
 build_all: build_hecate build_hecate build_signacli
 
+copy_setup:
+	cd ../hecate/data && cp plat_keys.txt mod_keys.txt user_id.txt mod_pk.txt plat_pk.txt ~/Documents/hecate/data/
+
 run_sender_daemon:
 	export LD_LIBRARY_PATH="." && ./gradlew run --args='-u +16172991780 daemon'
 
