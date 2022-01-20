@@ -37,7 +37,7 @@ run_sender_daemon:
 run_receiver_daemon:
 	export LD_LIBRARY_PATH="." && ./gradlew run --args='-u +16174190472 daemon'
 
-run_sender_daemon:
+run_sender_daemon_send:
 	export LD_LIBRARY_PATH="." && ./gradlew run --args='--dbus send -m "Ill see you on the dark side of the moon" +16174190472'
 
 run_send_nodaemon:
