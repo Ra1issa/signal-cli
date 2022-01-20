@@ -46,8 +46,8 @@ public class Main {
 
         var parser = App.buildArgumentParser();
 
-        var ns = parser.parseArgsOrFail(args);
-
+        var ns = parser.parseArgsOrFail(args);        
+        
         int status = 0;
         try {
             new App(ns).init();

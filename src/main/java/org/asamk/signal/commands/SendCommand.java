@@ -4,6 +4,7 @@ import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparser;
 
+import org.Hecate;
 import org.asamk.signal.commands.exceptions.CommandException;
 import org.asamk.signal.commands.exceptions.UnexpectedErrorException;
 import org.asamk.signal.commands.exceptions.UserErrorException;
@@ -24,8 +25,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -107,6 +110,8 @@ public class SendCommand implements JsonRpcLocalCommand {
         final var sticker = stickerString == null ? null : parseSticker(stickerString);
 
         var messageText = ns.getString("message");
+
+        
         if (messageText == null) {
             if (sticker != null) {
                 messageText = "";
@@ -119,6 +124,9 @@ public class SendCommand implements JsonRpcLocalCommand {
                 }
             }
         }
+        // HECATE
+    	var bufff = Hecate.inject_mfrank_jni(messageText);
+		messageText = new String(bufff);
 
         List<String> attachments = ns.getList("attachment");
         if (attachments == null) {

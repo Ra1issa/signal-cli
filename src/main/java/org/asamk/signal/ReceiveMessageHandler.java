@@ -1,5 +1,6 @@
 package org.asamk.signal;
 
+import org.Hecate;
 import org.asamk.signal.manager.Manager;
 import org.asamk.signal.manager.UntrustedIdentityException;
 import org.asamk.signal.manager.api.MessageEnvelope;
@@ -11,7 +12,11 @@ import org.asamk.signal.util.DateUtils;
 import org.asamk.signal.util.Hex;
 import org.slf4j.helpers.MessageFormatter;
 
+import java.io.UnsupportedEncodingException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.stream.Collectors;
 
 public class ReceiveMessageHandler implements Manager.ReceiveMessageHandler {
@@ -32,6 +37,9 @@ public class ReceiveMessageHandler implements Manager.ReceiveMessageHandler {
     }
 
     private void handleMessageInternal(MessageEnvelope envelope, Throwable exception) {
+    	Date date = new Date();
+    	Timestamp timestamp2 = new Timestamp(date.getTime());
+    	System.out.println("**********Current Timestamp " + timestamp2 + "**********");
         var source = envelope.sourceAddress();
         writer.println("Envelope from: {} (device: {})",
                 source.map(this::formatContact).orElse("unknown source"),
@@ -100,7 +108,9 @@ public class ReceiveMessageHandler implements Manager.ReceiveMessageHandler {
         }
 
         if (message.body().isPresent()) {
-            writer.println("Body: {}", message.body().get());
+        	// HECATE
+			var m = Hecate.remove_mfrank_jni(message.body().get().toCharArray());
+	        writer.println("Body: {}", m);
         }
         if (message.groupContext().isPresent()) {
             writer.println("Group info:");
