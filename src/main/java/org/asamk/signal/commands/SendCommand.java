@@ -128,8 +128,7 @@ public class SendCommand implements JsonRpcLocalCommand {
         }
         // HECATE
         Date date = new Date();
-		Timestamp timestamp = new Timestamp(date.getTime());
-		System.out.println("Timestamp START: " + timestamp);
+		System.out.println("Timestamp START: " + date.getTime());
 		
     	var bufff = Hecate.inject_mfrank_jni(messageText);
 		messageText = new String(bufff);
