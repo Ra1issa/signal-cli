@@ -37,9 +37,6 @@ public class ReceiveMessageHandler implements Manager.ReceiveMessageHandler {
     }
 
     private void handleMessageInternal(MessageEnvelope envelope, Throwable exception) {
-    	Date date = new Date();
-    	Timestamp timestamp2 = new Timestamp(date.getTime());
-    	System.out.println("**********Current Timestamp " + timestamp2 + "**********");
         var source = envelope.sourceAddress();
         writer.println("Envelope from: {} (device: {})",
                 source.map(this::formatContact).orElse("unknown source"),
@@ -115,7 +112,7 @@ public class ReceiveMessageHandler implements Manager.ReceiveMessageHandler {
 			// Without HECATE
 			// var m = message.body().get();
 	        writer.println("Body: {}", m);
-	        System.out.println("Timestamp END: " + timestamp);
+	        System.out.println("Timestamp END: " + System.nanoTime());
         }	
         if (message.groupContext().isPresent()) {
             writer.println("Group info:");
