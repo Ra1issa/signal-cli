@@ -79,6 +79,10 @@ public class SendCommand implements JsonRpcLocalCommand {
     public void handleCommand(
             final Namespace ns, final Manager m, final OutputWriter outputWriter
     ) throws CommandException {
+
+        Date date = new Date();
+		System.out.println("Timestamp VERY START: " + System.nanoTime());
+		
         final var isNoteToSelf = Boolean.TRUE.equals(ns.getBoolean("note-to-self"));
         final var recipientStrings = ns.<String>getList("recipient");
         final var groupIdStrings = ns.<String>getList("group-id");
@@ -127,9 +131,8 @@ public class SendCommand implements JsonRpcLocalCommand {
             }
         }
         // HECATE
-        Date date = new Date();
-		System.out.println("Timestamp START: " + date.getTime());
-		
+//        Date date = new Date();
+//		System.out.println("Timestamp START: " + date.getTime());		
     	var bufff = Hecate.inject_mfrank_jni(messageText);
 		messageText = new String(bufff);
 		
@@ -176,6 +179,7 @@ public class SendCommand implements JsonRpcLocalCommand {
         } catch (InvalidStickerException e) {
             throw new UserErrorException("Failed to send sticker: " + e.getMessage(), e);
         }
+		System.out.println("Timestamp END: " + System.nanoTime());
     }
 
     private List<Message.Mention> parseMentions(
