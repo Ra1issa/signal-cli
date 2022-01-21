@@ -43,6 +43,8 @@ run_send_nodaemon:
 run_receive_nodaemon:
 		export LD_LIBRARY_PATH="." && ./gradlew run --args='-u +16174190472 receive'
 
+run_both: run_send_nodaemon run_receive_nodaemon
+
 java_versions:
 	sudo update-alternatives --remove-all java
 	sudo update-alternatives --remove-all jar
