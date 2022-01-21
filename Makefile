@@ -26,7 +26,7 @@ build_signacli:
 		./gradlew installDist
 		./gradlew distTar
 
-build_all: build_signacli
+build_all: build_libsignal build_signacli
 
 copy_setup:
 	cd ../hecate/data && cp * ~/Documents/hecate/data/
@@ -40,8 +40,8 @@ run_receiver_daemon:
 run_send_nodaemon:
 		./gradlew run --args='-u +16172991780 send -m "Ill see you on the dark side of the moon" +16174190472'
 
-run_receive_nodaemon:
-		./gradlew run --args='-u +16174190472 receive'
+run_sender_receive_nodaemon:
+		./gradlew run --args='-u +16172991780 receive'
 
 java_versions:
 	sudo update-alternatives --remove-all java
