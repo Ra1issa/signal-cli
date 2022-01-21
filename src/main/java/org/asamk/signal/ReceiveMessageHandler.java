@@ -112,7 +112,7 @@ public class ReceiveMessageHandler implements Manager.ReceiveMessageHandler {
 			// Without HECATE
 			// var m = message.body().get();
 	        writer.println("Body: {}", m);
-	        System.out.println("Timestamp END: " + System.nanoTime());
+	        System.out.println("Timestamp END: " + timestamp);
         }	
         if (message.groupContext().isPresent()) {
             writer.println("Group info:");
