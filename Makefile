@@ -37,11 +37,12 @@ run_sender_daemon:
 run_receiver_daemon:
 	export LD_LIBRARY_PATH="." && ./gradlew run --args='-u +16174190472 daemon'
 
-run_send_nodaemon:
-		export LD_LIBRARY_PATH="." && ./gradlew run --args='-u +16172991780 send -m "Ill see you on the dark side of the moon" +16174190472'
+run_send:
+	export LD_LIBRARY_PATH="." && ./gradlew run --args='-u +16172991780 receive'
+	export LD_LIBRARY_PATH="." && ./gradlew run --args='-u +16172991780 send -m "Ill see you on the dark side of the moon" +16174190472'
 
-run_receive_nodaemon:
-		export LD_LIBRARY_PATH="." && ./gradlew run --args='-u +16174190472 receive'
+run_receive:
+	export LD_LIBRARY_PATH="." && ./gradlew run --args='-u +16174190472 receive'
 
 run_both: run_send_nodaemon run_receive_nodaemon
 
