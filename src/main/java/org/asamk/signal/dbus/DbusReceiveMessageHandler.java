@@ -62,11 +62,12 @@ public class DbusReceiveMessageHandler implements Manager.ReceiveMessageHandler 
                     .orElse(false);
             if (!message.isEndSession() && !isGroupUpdate) {
             	// Hecate
-            	var m = "";
-//            	var m = message.body().orElse("");
-            	if (message.body().isPresent()) {
-            		m = Hecate.remove_mfrank_jni(message.body().get().toCharArray());
-            	}
+            	
+            	var m = message.body().orElse("");
+//            	var m = "";
+//            	if (message.body().isPresent()) {
+//            		m = Hecate.remove_mfrank_jni(message.body().get().toCharArray());
+//            	}
                 conn.sendMessage(new Signal.MessageReceived(objectPath,
                         message.timestamp(),
                         senderString,

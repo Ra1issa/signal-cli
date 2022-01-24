@@ -106,12 +106,10 @@ public class ReceiveMessageHandler implements Manager.ReceiveMessageHandler {
 
         if (message.body().isPresent()) {
         	// HECATE
-			var m = Hecate.remove_mfrank_jni(message.body().get().toCharArray());
-			Date date = new Date();
+//			var m = Hecate.remove_mfrank_jni(message.body().get().toCharArray());
 			// Without HECATE
-			// var m = message.body().get();
+			var m = message.body().get();
 	        writer.println("Body: {}", m);
-	        System.out.println("Timestamp END: " + date.getTime());
         }	
         if (message.groupContext().isPresent()) {
             writer.println("Group info:");

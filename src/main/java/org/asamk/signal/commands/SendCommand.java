@@ -24,9 +24,15 @@ import org.asamk.signal.util.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -79,107 +85,128 @@ public class SendCommand implements JsonRpcLocalCommand {
     public void handleCommand(
             final Namespace ns, final Manager m, final OutputWriter outputWriter
     ) throws CommandException {
-
-        Date date = new Date();
-		System.out.println("Timestamp VERY START: " + System.nanoTime());
-		
-        final var isNoteToSelf = Boolean.TRUE.equals(ns.getBoolean("note-to-self"));
-        final var recipientStrings = ns.<String>getList("recipient");
-        final var groupIdStrings = ns.<String>getList("group-id");
-
-        final var recipientIdentifiers = CommandUtil.getRecipientIdentifiers(m,
-                isNoteToSelf,
-                recipientStrings,
-                groupIdStrings);
-
-        final var isEndSession = Boolean.TRUE.equals(ns.getBoolean("end-session"));
-        if (isEndSession) {
-            final var singleRecipients = recipientIdentifiers.stream()
-                    .filter(r -> r instanceof RecipientIdentifier.Single)
-                    .map(RecipientIdentifier.Single.class::cast)
-                    .collect(Collectors.toSet());
-            if (singleRecipients.isEmpty()) {
-                throw new UserErrorException("No recipients given");
-            }
-
-            try {
-                final var results = m.sendEndSessionMessage(singleRecipients);
-                outputResult(outputWriter, results);
-                return;
-            } catch (IOException e) {
-                throw new UnexpectedErrorException("Failed to send message: " + e.getMessage() + " (" + e.getClass()
-                        .getSimpleName() + ")", e);
-            }
-        }
-
-        final var stickerString = ns.getString("sticker");
-        final var sticker = stickerString == null ? null : parseSticker(stickerString);
-
-        var messageText = ns.getString("message");
-
-        
-        if (messageText == null) {
-            if (sticker != null) {
-                messageText = "";
-            } else {
-                logger.debug("Reading message from stdin...");
-                try {
-                    messageText = IOUtils.readAll(System.in, Charset.defaultCharset());
-                } catch (IOException e) {
-                    throw new UserErrorException("Failed to read message from stdin: " + e.getMessage());
-                }
-            }
-        }
-        // HECATE
-//        Date date = new Date();
-//		System.out.println("Timestamp START: " + date.getTime());		
-    	var bufff = Hecate.inject_mfrank_jni(messageText);
-		messageText = new String(bufff);
-		
-
-        List<String> attachments = ns.getList("attachment");
-        if (attachments == null) {
-            attachments = List.of();
-        }
-
-        List<String> mentionStrings = ns.getList("mention");
-        final var mentions = mentionStrings == null ? List.<Message.Mention>of() : parseMentions(m, mentionStrings);
-
-        final Message.Quote quote;
-        final var quoteTimestamp = ns.getLong("quote-timestamp");
-        if (quoteTimestamp != null) {
-            final var quoteAuthor = ns.getString("quote-author");
-            final var quoteMessage = ns.getString("quote-message");
-            List<String> quoteMentionStrings = ns.getList("quote-mention");
-            final var quoteMentions = quoteMentionStrings == null
-                    ? List.<Message.Mention>of()
-                    : parseMentions(m, quoteMentionStrings);
-            quote = new Message.Quote(quoteTimestamp,
-                    CommandUtil.getSingleRecipientIdentifier(quoteAuthor, m.getSelfNumber()),
-                    quoteMessage == null ? "" : quoteMessage,
-                    quoteMentions);
-        } else {
-            quote = null;
-        }
-
+    	Path path = Paths.get("hecate/msgs/msg9.txt");
+        String msg = "";
         try {
-            var results = m.sendMessage(new Message(messageText,
-                    attachments,
-                    mentions,
-                    Optional.ofNullable(quote),
-                    Optional.ofNullable(sticker)), recipientIdentifiers);
-            outputResult(outputWriter, results);
-        } catch (AttachmentInvalidException | IOException e) {
-            throw new UnexpectedErrorException("Failed to send message: " + e.getMessage() + " (" + e.getClass()
-                    .getSimpleName() + ")", e);
-        } catch (GroupNotFoundException | NotAGroupMemberException | GroupSendingNotAllowedException e) {
-            throw new UserErrorException(e.getMessage());
-        } catch (UnregisteredRecipientException e) {
-            throw new UserErrorException("The user " + e.getSender().getIdentifier() + " is not registered.");
-        } catch (InvalidStickerException e) {
-            throw new UserErrorException("Failed to send sticker: " + e.getMessage(), e);
+			msg = Files.readAllLines(path).get(0);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        
+
+        for (int i = 0; i < 600; i ++) {
+            var start = System.nanoTime();
+            
+	        final var isNoteToSelf = Boolean.TRUE.equals(ns.getBoolean("note-to-self"));
+	        final var recipientStrings = ns.<String>getList("recipient");
+	        final var groupIdStrings = ns.<String>getList("group-id");
+	
+	        final var recipientIdentifiers = CommandUtil.getRecipientIdentifiers(m,
+	                isNoteToSelf,
+	                recipientStrings,
+	                groupIdStrings);
+	
+	        final var isEndSession = Boolean.TRUE.equals(ns.getBoolean("end-session"));
+	        if (isEndSession) {
+	            final var singleRecipients = recipientIdentifiers.stream()
+	                    .filter(r -> r instanceof RecipientIdentifier.Single)
+	                    .map(RecipientIdentifier.Single.class::cast)
+	                    .collect(Collectors.toSet());
+	            if (singleRecipients.isEmpty()) {
+	                throw new UserErrorException("No recipients given");
+	            }
+	
+	            try {
+	                final var results = m.sendEndSessionMessage(singleRecipients);
+	                outputResult(outputWriter, results);
+	                return;
+	            } catch (IOException e) {
+	                throw new UnexpectedErrorException("Failed to send message: " + e.getMessage() + " (" + e.getClass()
+	                        .getSimpleName() + ")", e);
+	            }
+	        }
+	
+	        final var stickerString = ns.getString("sticker");
+	        final var sticker = stickerString == null ? null : parseSticker(stickerString);
+	
+	        var messageText = ns.getString("message");
+	
+	        
+	        if (messageText == null) {
+	            if (sticker != null) {
+	                messageText = "";
+	            } else {
+	                logger.debug("Reading message from stdin...");
+	                try {
+	                    messageText = IOUtils.readAll(System.in, Charset.defaultCharset());
+	                } catch (IOException e) {
+	                    throw new UserErrorException("Failed to read message from stdin: " + e.getMessage());
+	                }
+	            }
+	        }
+	        // HECATE
+//	    	var bufff = Hecate.inject_mfrank_jni(messageText);
+//			messageText = new String(bufff);
+	        messageText = msg;		
+	
+	        List<String> attachments = ns.getList("attachment");
+	        if (attachments == null) {
+	            attachments = List.of();
+	        }
+	
+	        List<String> mentionStrings = ns.getList("mention");
+	        final var mentions = mentionStrings == null ? List.<Message.Mention>of() : parseMentions(m, mentionStrings);
+	
+	        final Message.Quote quote;
+	        final var quoteTimestamp = ns.getLong("quote-timestamp");
+	        if (quoteTimestamp != null) {
+	            final var quoteAuthor = ns.getString("quote-author");
+	            final var quoteMessage = ns.getString("quote-message");
+	            List<String> quoteMentionStrings = ns.getList("quote-mention");
+	            final var quoteMentions = quoteMentionStrings == null
+	                    ? List.<Message.Mention>of()
+	                    : parseMentions(m, quoteMentionStrings);
+	            quote = new Message.Quote(quoteTimestamp,
+	                    CommandUtil.getSingleRecipientIdentifier(quoteAuthor, m.getSelfNumber()),
+	                    quoteMessage == null ? "" : quoteMessage,
+	                    quoteMentions);
+	        } else {
+	            quote = null;
+	        }
+	
+	        try {
+	            var results = m.sendMessage(new Message(messageText,
+	                    attachments,
+	                    mentions,
+	                    Optional.ofNullable(quote),
+	                    Optional.ofNullable(sticker)), recipientIdentifiers);
+	            outputResult(outputWriter, results);
+	        } catch (AttachmentInvalidException | IOException e) {
+	            throw new UnexpectedErrorException("Failed to send message: " + e.getMessage() + " (" + e.getClass()
+	                    .getSimpleName() + ")", e);
+	        } catch (GroupNotFoundException | NotAGroupMemberException | GroupSendingNotAllowedException e) {
+	            throw new UserErrorException(e.getMessage());
+	        } catch (UnregisteredRecipientException e) {
+	            throw new UserErrorException("The user " + e.getSender().getIdentifier() + " is not registered.");
+	        } catch (InvalidStickerException e) {
+	            throw new UserErrorException("Failed to send sticker: " + e.getMessage(), e);
+	        }
+	        var end = System.nanoTime();
+	  		try {
+	  	        FileWriter fr;
+	  	        File file = new File("hecate/10KB/nohecate_sx.txt");
+	  	        file.createNewFile();
+	  			fr = new FileWriter(file, true);
+	  	        BufferedWriter br = new BufferedWriter(fr);
+	  	        br.write(String.valueOf(end-start) + ",\n");
+	  	        br.close();
+	  	        fr.close();
+	  		} catch (IOException e) {
+	  			// TODO Auto-generated catch block
+	  			e.printStackTrace();
+	  		}
         }
-		System.out.println("Timestamp END: " + System.nanoTime());
     }
 
     private List<Message.Mention> parseMentions(

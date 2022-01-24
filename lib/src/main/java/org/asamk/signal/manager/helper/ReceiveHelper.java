@@ -12,6 +12,9 @@ import org.whispersystems.signalservice.api.messages.SignalServiceEnvelope;
 import org.whispersystems.signalservice.api.websocket.WebSocketConnectionState;
 import org.whispersystems.signalservice.api.websocket.WebSocketUnavailableException;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Collection;
@@ -104,7 +107,7 @@ public class ReceiveHelper {
         final var signalWebSocket = dependencies.getSignalWebSocket();
 
         var backOffCounter = 0;
-
+        var start = 0L;
         while (!Thread.interrupted()) {
             if (needsToRetryFailedMessages) {
                 retryFailedReceivedMessages(handler);
@@ -126,8 +129,9 @@ public class ReceiveHelper {
                     cachedMessage[0] = account.getMessageCache().cacheMessage(envelope1, recipientId);
                 });
                 backOffCounter = 0;
-
                 if (result.isPresent()) {
+                	// HECATE TIME
+                	start = System.nanoTime();
                     envelope = result.get();
                     logger.debug("New message received from server");
                 } else {
@@ -169,8 +173,23 @@ public class ReceiveHelper {
                 if (returnOnTimeout) return;
                 continue;
             }
-
             final var result = context.getIncomingMessageHandler().handleEnvelope(envelope, ignoreAttachments, handler);
+            // HECATE TIME
+   	        var end = System.nanoTime();
+   	  		try {
+   	  	        FileWriter fr;
+   	  	        File file = new File("hecate/10KB/nohecate_rx.txt");
+   	  	        file.createNewFile();
+   	  			fr = new FileWriter(file, true);
+   	  	        BufferedWriter br = new BufferedWriter(fr);
+   	  	        br.write(String.valueOf(end-start) + ",\n");
+   	  	        br.close();
+   	  	        fr.close();
+   	  		} catch (IOException e) {
+   	  			// TODO Auto-generated catch block
+   	  			e.printStackTrace();
+   	  		}    	
+   	  		
             for (final var h : result.first()) {
                 final var existingAction = queuedActions.get(h);
                 if (existingAction == null) {
@@ -179,8 +198,8 @@ public class ReceiveHelper {
                     existingAction.mergeOther(h);
                 }
             }
-            final var exception = result.second();
-
+            
+            final var exception = result.second();         
             if (hasCaughtUpWithOldMessages) {
                 handleQueuedActions(queuedActions.keySet());
                 queuedActions.clear();
