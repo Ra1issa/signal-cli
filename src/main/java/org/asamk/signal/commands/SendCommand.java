@@ -85,7 +85,7 @@ public class SendCommand implements JsonRpcLocalCommand {
     public void handleCommand(
             final Namespace ns, final Manager m, final OutputWriter outputWriter
     ) throws CommandException {
-    	Path path = Paths.get("hecate/msgs/msg9.txt");
+    	Path path = Paths.get("hecate/msgs/msg3.txt");
         String msg = "";
         try {
 			msg = Files.readAllLines(path).get(0);
@@ -195,7 +195,7 @@ public class SendCommand implements JsonRpcLocalCommand {
 	        var end = System.nanoTime();
 	  		try {
 	  	        FileWriter fr;
-	  	        File file = new File("hecate/10KB/nohecate_sx.txt");
+	  	        File file = new File("hecate/500B/nohecate_sx.txt");
 	  	        file.createNewFile();
 	  			fr = new FileWriter(file, true);
 	  	        BufferedWriter br = new BufferedWriter(fr);

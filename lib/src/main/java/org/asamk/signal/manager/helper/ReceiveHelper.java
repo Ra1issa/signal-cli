@@ -178,7 +178,7 @@ public class ReceiveHelper {
    	        var end = System.nanoTime();
    	  		try {
    	  	        FileWriter fr;
-   	  	        File file = new File("hecate/10KB/nohecate_rx.txt");
+   	  	        File file = new File("hecate/500B/nohecate_rx.txt");
    	  	        file.createNewFile();
    	  			fr = new FileWriter(file, true);
    	  	        BufferedWriter br = new BufferedWriter(fr);

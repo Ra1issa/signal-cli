@@ -1,7 +1,7 @@
 import csv
 import functools
 import numpy as np
-dir = "10B/"
+dir = "500B/"
 
 def calculate_mean(data):
     mean = np.mean(data)
@@ -45,12 +45,12 @@ read_data(file_name, data)
 av_rx = round(calculate_mean(data)/10**6,3)
 print("Average Hecate Rx is :" + str(av_rx))
 
-overhead_rx = 100*av_rx/av_nrx-100
-overhead_sx = 100*av_sx/av_nsx-100
-overhead_total= 100*(av_sx+av_rx)/(av_nsx+av_nrx)-100
+overhead_rx = round(100*(av_rx/av_nrx)-100,3)
+overhead_sx = round(100*(av_sx/av_nsx)-100,3)
+overhead_total= round(100*(av_sx+av_rx)/(av_nsx+av_nrx)-100,3)
 
-print("Overhead Rx is :" + str(overhead_rx))
 print("Overhead Sx is :" + str(overhead_sx))
+print("Overhead Rx is :" + str(overhead_rx))
 print("Overhead Total is :" + str(overhead_total))
 # file_name = dir + 'hecate_start.txt'
 # start = []
