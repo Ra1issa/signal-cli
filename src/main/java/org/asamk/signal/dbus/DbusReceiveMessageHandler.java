@@ -1,5 +1,6 @@
 package org.asamk.signal.dbus;
 
+import org.Hecate;
 import org.asamk.Signal;
 import org.asamk.signal.manager.Manager;
 import org.asamk.signal.manager.api.MessageEnvelope;
@@ -60,17 +61,23 @@ public class DbusReceiveMessageHandler implements Manager.ReceiveMessageHandler 
                     .map(MessageEnvelope.Data.GroupContext::isGroupUpdate)
                     .orElse(false);
             if (!message.isEndSession() && !isGroupUpdate) {
+            	// Hecate
+            	var m = "";
+//            	var m = message.body().orElse("");
+            	if (message.body().isPresent()) {
+            		m = Hecate.remove_mfrank_jni(message.body().get().toCharArray());
+            	}
                 conn.sendMessage(new Signal.MessageReceived(objectPath,
                         message.timestamp(),
                         senderString,
                         groupId,
-                        message.body().orElse(""),
+                        m,
                         getAttachments(message)));
                 conn.sendMessage(new Signal.MessageReceivedV2(objectPath,
                         message.timestamp(),
                         senderString,
                         groupId,
-                        message.body().orElse(""),
+                        m,
                         getMessageExtras(message)));
             }
         }
