@@ -131,7 +131,7 @@ public class ReceiveHelper {
                 backOffCounter = 0;
                 if (result.isPresent()) {
                 	// HECATE TIME
-                	start = System.nanoTime();
+                	start = System.currentTimeMillis();
                     envelope = result.get();
                     logger.debug("New message received from server");
                 } else {
@@ -175,20 +175,35 @@ public class ReceiveHelper {
             }
             final var result = context.getIncomingMessageHandler().handleEnvelope(envelope, ignoreAttachments, handler);
             // HECATE TIME
-   	        var end = System.nanoTime();
+   	        var end = System.currentTimeMillis();
    	  		try {
    	  	        FileWriter fr;
-   	  	        File file = new File("hecate/500B/nohecate_rx.txt");
+   	  	        File file = new File("hecate/Final/nohecate_rx_start.txt");
    	  	        file.createNewFile();
    	  			fr = new FileWriter(file, true);
    	  	        BufferedWriter br = new BufferedWriter(fr);
-   	  	        br.write(String.valueOf(end-start) + ",\n");
+   	  	        br.write(String.valueOf(start) + ",\n");
    	  	        br.close();
    	  	        fr.close();
    	  		} catch (IOException e) {
    	  			// TODO Auto-generated catch block
    	  			e.printStackTrace();
    	  		}    	
+   	  		
+   	  		try {
+   	  	        FileWriter fr;
+   	  	        File file = new File("hecate/Final/nohecate_rx_end.txt");
+   	  	        file.createNewFile();
+   	  			fr = new FileWriter(file, true);
+   	  	        BufferedWriter br = new BufferedWriter(fr);
+   	  	        br.write(String.valueOf(end) + ",\n");
+   	  	        br.close();
+   	  	        fr.close();
+   	  		} catch (IOException e) {
+   	  			// TODO Auto-generated catch block
+   	  			e.printStackTrace();
+   	  		}    	
+   	  		
    	  		
             for (final var h : result.first()) {
                 final var existingAction = queuedActions.get(h);

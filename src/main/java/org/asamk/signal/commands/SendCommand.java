@@ -85,19 +85,17 @@ public class SendCommand implements JsonRpcLocalCommand {
     public void handleCommand(
             final Namespace ns, final Manager m, final OutputWriter outputWriter
     ) throws CommandException {
-    	Path path = Paths.get("hecate/msgs/msg3.txt");
-        String msg = "";
-        try {
+        Path path = Paths.get("hecate/msgs/msg5.txt");
+		String msg = "";
+		try {
 			msg = Files.readAllLines(path).get(0);
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-        
-
-        for (int i = 0; i < 600; i ++) {
-            var start = System.nanoTime();
-            
+        for (int i = 0; i < 10; i ++) {
+            var start = System.currentTimeMillis();
+            System.out.println("Java:"+start);
 	        final var isNoteToSelf = Boolean.TRUE.equals(ns.getBoolean("note-to-self"));
 	        final var recipientStrings = ns.<String>getList("recipient");
 	        final var groupIdStrings = ns.<String>getList("group-id");
@@ -192,20 +190,6 @@ public class SendCommand implements JsonRpcLocalCommand {
 	        } catch (InvalidStickerException e) {
 	            throw new UserErrorException("Failed to send sticker: " + e.getMessage(), e);
 	        }
-	        var end = System.nanoTime();
-	  		try {
-	  	        FileWriter fr;
-	  	        File file = new File("hecate/500B/nohecate_sx.txt");
-	  	        file.createNewFile();
-	  			fr = new FileWriter(file, true);
-	  	        BufferedWriter br = new BufferedWriter(fr);
-	  	        br.write(String.valueOf(end-start) + ",\n");
-	  	        br.close();
-	  	        fr.close();
-	  		} catch (IOException e) {
-	  			// TODO Auto-generated catch block
-	  			e.printStackTrace();
-	  		}
         }
     }
 
